@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
  * 
  * Manages CRUD operations and persists data across user sessions using HttpSession.
  */
-@WebServlet("/api/todos")
+@WebServlet(name = "TodoServlet", urlPatterns = {"/api/todos"})
 public class TodoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String SESSION_KEY = "user_todo_list";

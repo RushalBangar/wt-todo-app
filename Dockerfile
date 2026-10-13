@@ -1,32 +1,39 @@
 # ==============================================================================
 # Dockerfile for TaskMaster Todo Web App (Tomcat 9 + Java Servlets)
-# Packages project as ROOT.war and deploys to Tomcat
+# Deploys directly into Tomcat's ROOT context
 # ==============================================================================
 
 FROM tomcat:9.0-jdk11-openjdk-slim
 
-# Step 1: Build the Web Application Archive (ROOT.war)
-WORKDIR /build
-COPY index.html style.css app.js ./
-COPY WEB-INF ./WEB-INF
-COPY src ./src
+# Remove all default sample web applications
+RUN rm -rf /usr/local/tomcat/webapps/* /usr/local/tomcat/webapps.dist
 
-# Compile Java source files into WEB-INF/classes
+# Create ROOT application directory
+RUN mkdir -p /usr/local/tomcat/webapps/ROOT
+
+# Set working directory to ROOT
+WORKDIR /usr/local/tomcat/webapps/ROOT
+
+# Copy frontend static files
+COPY index.html style.css app.js ./
+
+# Copy WEB-INF directory
+COPY WEB-INF ./WEB-INF
+
+# Copy Java source files and compile into WEB-INF/classes
+COPY src ./src
 RUN mkdir -p WEB-INF/classes && \
     javac -cp "/usr/local/tomcat/lib/servlet-api.jar" -d WEB-INF/classes $(find src -name "*.java") && \
-    rm -rf src && \
-    jar -cvf ROOT.war *
+    rm -rf src
 
-# Step 2: Deploy to Tomcat webapps
-RUN rm -rf /usr/local/tomcat/webapps/* && \
-    cp /build/ROOT.war /usr/local/tomcat/webapps/ROOT.war && \
-    rm -rf /build
+# Ensure correct file permissions
+RUN chmod -R 755 /usr/local/tomcat/webapps/ROOT
 
-# Ensure Tomcat runs from its proper CATALINA_HOME
+# Reset working directory to Tomcat home
 WORKDIR /usr/local/tomcat
 
 # Expose ports
 EXPOSE 8080 10000
 
-# Dynamically adapt Tomcat port to Render's $PORT environment variable and start
-CMD ["sh", "-c", "sed -i \"s/port=\\\"8080\\\"/port=\\\"${PORT:-8080}\\\"/g\" /usr/local/tomcat/conf/server.xml && catalina.sh run"]
+# Dynamically bind port to Render's $PORT and run Tomcat
+CMD ["sh", "-c", "sed -i \"s/port=\\\"8080\\\"/port=\\\"${PORT:-8080}\\\"/g\" /usr/local/tomcat/conf/server.xml && exec /usr/local/tomcat/bin/catalina.sh run"]
