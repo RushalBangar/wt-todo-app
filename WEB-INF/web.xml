@@ -21,7 +21,7 @@
         <url-pattern>/api/todos</url-pattern>
     </servlet-mapping>
 
-    <!-- Struts 2 Filter Configuration (for Struts Action CRUD) -->
+    <!-- Struts 2 Filter Configuration (Uncomment when Struts JARs are added to lib/)
     <filter>
         <filter-name>struts2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
@@ -30,5 +30,5 @@
         <filter-name>struts2</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+    -->
 </web-app>

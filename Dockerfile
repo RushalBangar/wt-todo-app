@@ -23,8 +23,8 @@ RUN mkdir -p WEB-INF/classes && \
     javac -cp "/usr/local/tomcat/lib/servlet-api.jar" -d WEB-INF/classes $(find src -name "*.java") && \
     rm -rf src
 
-# Expose default Tomcat port
-EXPOSE 8080
+# Expose ports
+EXPOSE 8080 10000
 
-# Start Tomcat in foreground
-CMD ["catalina.sh", "run"]
+# Dynamically adapt Tomcat port to Render's $PORT environment variable and start
+CMD ["sh", "-c", "sed -i \"s/port=\\\"8080\\\"/port=\\\"${PORT:-8080}\\\"/g\" /usr/local/tomcat/conf/server.xml && catalina.sh run"]
