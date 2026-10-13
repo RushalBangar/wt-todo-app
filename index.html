@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simple Todo List Web App with JavaScript Arrays, Objects, JSON Handling, and jQuery Events.">
+    <title>TaskMaster | Simple Todo List Web App</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Main Card Container -->
+        <main class="todo-card">
+            <!-- App Header -->
+            <header class="app-header">
+                <div class="header-icon">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+                <div class="header-text">
+                    <h1 id="appTitle">TaskMaster</h1>
+                    <p class="subtitle">Organize your day with simple, intuitive task tracking</p>
+                </div>
+                <div class="badge-tech">
+                    <span id="serverStatusBadge"><i class="fa-solid fa-circle" style="color:#f59e0b; font-size:9px;"></i> Servlet API Ready</span>
+                </div>
+            </header>
+
+            <!-- Input Form Section -->
+            <section class="input-section">
+                <form id="todoForm" class="todo-form">
+                    <div class="input-group">
+                        <i class="fa-regular fa-circle-dot input-icon"></i>
+                        <input 
+                            type="text" 
+                            id="taskInput" 
+                            placeholder="What needs to be done? (e.g., Complete WT mini-project)" 
+                            autocomplete="off" 
+                            required
+                        >
+                        <select id="prioritySelect" class="priority-select" title="Set Priority">
+                            <option value="Normal">Normal</option>
+                            <option value="High">High</option>
+                            <option value="Low">Low</option>
+                        </select>
+                        <button type="submit" id="addBtn" class="btn btn-primary">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Search & Filter Controls -->
+            <section class="controls-section">
+                <!-- Search Box -->
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search tasks...">
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="filter-tabs" role="tablist">
+                    <button class="filter-btn active" data-filter="all" id="filterAll">
+                        All <span class="badge" id="badgeAll">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="pending" id="filterPending">
+                        Pending <span class="badge" id="badgePending">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="completed" id="filterCompleted">
+                        Completed <span class="badge" id="badgeCompleted">0</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Task List Container -->
+            <section class="list-section">
+                <ul id="todoList" class="todo-items-list" aria-label="Todo list items">
+                    <!-- Dynamic tasks rendered via jQuery -->
+                </ul>
+
+                <!-- Empty State Message -->
+                <div id="emptyState" class="empty-state">
+                    <i class="fa-regular fa-clipboard empty-icon"></i>
+                    <h3>No tasks found</h3>
+                    <p>Add your first task above to get started!</p>
+                </div>
+            </section>
+
+            <!-- App Footer & Action Toolbar -->
+            <footer class="app-footer">
+                <div class="footer-stats">
+                    <span id="itemsLeftCount">0 items left</span>
+                </div>
+                <div class="footer-actions">
+                    <button id="exportJsonBtn" class="btn-text" title="Download tasks as JSON file">
+                        <i class="fa-solid fa-file-code"></i> View JSON
+                    </button>
+                    <button id="clearCompletedBtn" class="btn-text" title="Remove all completed tasks">
+                        <i class="fa-solid fa-trash-can"></i> Clear Completed
+                    </button>
+                </div>
+            </footer>
+        </main>
+
+        <!-- JSON Viewer Modal (Demonstrates JSON Handling for Lab/Viva) -->
+        <div id="jsonModal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fa-solid fa-code"></i> JSON Data View</h2>
+                    <button id="closeModalBtn" class="btn-close" aria-label="Close modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-desc">This live JSON output proves <strong>JSON handling</strong> (`JSON.stringify` & `JSON.parse`) in accordance with course requirements:</p>
+                    <pre><code id="jsonDisplay">// JSON will appear here</code></pre>
+                </div>
+                <div class="modal-footer">
+                    <button id="copyJsonBtn" class="btn btn-secondary">
+                        <i class="fa-regular fa-copy"></i> Copy JSON
+                    </button>
+                    <button id="downloadJsonBtn" class="btn btn-primary">
+                        <i class="fa-solid fa-download"></i> Download .json
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery 3.7.1 via CDN (No download needed) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Custom Application Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
